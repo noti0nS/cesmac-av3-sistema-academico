@@ -1,0 +1,6 @@
+{
+    "dart.flutterSdkPath": "/home/noti0ns/.local/share/mise/installs/flutter/3.29.3-stable",
+    "debug.javascript.defaultRuntimeExecutable": {
+        "pwa-node": "/home/noti0ns/.local/share/mise/shims/node"
+    }
+}
