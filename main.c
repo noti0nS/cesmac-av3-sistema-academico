@@ -10,6 +10,8 @@ void exibir_banner() {
 
 int main()
 {
+
+  setlocale(LC_ALL,"");
   int option = 0;
   do
   {
