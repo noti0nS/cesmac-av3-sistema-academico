@@ -2,6 +2,25 @@
 #include <stdlib.h>
 #include <locale.h>
 
+
+struct Aluno
+{
+  char nome[100];
+  int nr_matricula;
+};
+
+struct AlunoDisciplinaNota
+{
+  struct Aluno aluno;
+  float nota;
+};
+
+struct Disciplina
+{
+  char titulo[50];
+  struct AlunoDisciplinaNota aluno_notas[500];
+};
+
 void exibir_banner() {
   printf("====================================\n");
   printf("         BEM VINDO AO PROJETO       \n");
