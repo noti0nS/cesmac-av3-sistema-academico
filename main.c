@@ -14,7 +14,7 @@ struct Aluno
 
 struct AlunoDisciplinaNota
 {
-  struct Aluno aluno;
+  int aluno_matricula;
   float nota;
 };
 
@@ -24,29 +24,51 @@ struct Disciplina
   struct AlunoDisciplinaNota aluno_notas[500];
 };
 
-void cadastrar_disciplina(struct Disciplina *disciplina)
+void atribuir_nota()
 {
+  printf("TODO\n");
+}
+
+void matricular_aluno()
+{
+  printf("TODO\n");
+}
+
+void exibir_alunos_matriculados()
+{
+  printf("TODO\n");
+}
+
+struct Disciplina cadastrar_disciplina()
+{
+  struct Disciplina disciplina;
   printf("Digite o título da disciplina: ");
-  scanf("%s", disciplina->titulo);
+  scanf("%s", disciplina.titulo);
+  return disciplina;
+}
+
+void exibir_disciplinas()
+{
+  printf("TODO\n");
+  ;
 }
 
 void exibir_banner()
 {
-printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
-printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
-printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
-printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
-printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
-printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
-printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
-printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
-printf("                                                                \n");
-
+  printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
+  printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
+  printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
+  printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
+  printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
+  printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
+  printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
+  printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
+  printf("                                                                \n");
 }
 
 void limpar_tela()
 {
-  system("clear || cls");
+  system("cls || clear");
 }
 
 void autenticar_usuario()
@@ -75,9 +97,12 @@ int main()
 {
   setlocale(LC_ALL, "Portuguese");
 
+  limpar_tela();
   autenticar_usuario();
   limpar_tela();
-  exibir_banner();
+
+  int current_disciplina_idx = 0;
+  struct Disciplina disciplinas[20];
 
   int option = 0;
   do
@@ -92,25 +117,37 @@ int main()
 
     scanf("%d", &option);
 
+    if (option > 0 && option < 7)
+    {
+      limpar_tela();
+      printf("\n");
+    }
+
     switch (option)
     {
     case 1:
-      printf("TODO\n");
+      exibir_disciplinas();
+      exibir_banner();
       break;
     case 2:
-      printf("TODO\n");
+      struct Disciplina disciplina = cadastrar_disciplina();
+      disciplinas[current_disciplina_idx] = disciplina;
+      current_disciplina_idx++;
+      exibir_banner();
       break;
     case 3:
-      printf("TODO\n");
+      exibir_alunos_matriculados();
+      exibir_banner();
       break;
     case 4:
-      printf("TODO\n");
+      matricular_aluno();
+      exibir_banner();
       break;
     case 5:
-      printf("TODO\n");
+      atribuir_nota();
+      exibir_banner();
       break;
     case 6:
-      limpar_tela();
       printf("Obrigado por usar o nosso sistema! Até a próxima :-)\n");
       break;
     default:

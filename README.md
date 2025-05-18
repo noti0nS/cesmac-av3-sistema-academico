@@ -1,0 +1,1 @@
+ACADX - [Sistema Acadêmico](https://github.com/CarlosWGama/LP1-20251-3/blob/main/1PERIODOA.md#4---sistema-acad%C3%AAmico-esgotado)
