@@ -12,6 +12,28 @@ struct Aluno
   int nr_matricula;
 };
 
+#define MAX_ALUNOS 500
+struct Aluno alunos[MAX_ALUNOS];
+int total_alunos = 0;
+
+void matricular_aluno() {
+    if (total_alunos >= MAX_ALUNOS) {
+        printf("Limite de alunos atingido.\n");
+        return;
+    }
+        struct Aluno novo;
+
+    printf("Digite o nome do aluno: ");
+    scanf(" %[^\n]", novo.nome);
+
+    printf("Digite o número de matrícula: ");
+    scanf("%d", &novo.nr_matricula);
+
+    alunos[total_alunos] = novo;
+    total_alunos++;
+
+    printf("Aluno matriculado com sucesso!\n");
+}
 struct AlunoDisciplinaNota
 {
   int aluno_matricula;
