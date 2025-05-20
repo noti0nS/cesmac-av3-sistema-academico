@@ -5,6 +5,7 @@
 
 #define USERNAME "admin"
 #define PASSWORD "admin"
+#define MAX_ALUNOS 500
 
 struct Aluno
 {
@@ -12,28 +13,6 @@ struct Aluno
   int nr_matricula;
 };
 
-#define MAX_ALUNOS 500
-struct Aluno alunos[MAX_ALUNOS];
-int total_alunos = 0;
-
-void matricular_aluno() {
-    if (total_alunos >= MAX_ALUNOS) {
-        printf("Limite de alunos atingido.\n");
-        return;
-    }
-        struct Aluno novo;
-
-    printf("Digite o nome do aluno: ");
-    scanf(" %[^\n]", novo.nome);
-
-    printf("Digite o número de matrícula: ");
-    scanf("%d", &novo.nr_matricula);
-
-    alunos[total_alunos] = novo;
-    total_alunos++;
-
-    printf("Aluno matriculado com sucesso!\n");
-}
 struct AlunoDisciplinaNota
 {
   int aluno_matricula;
@@ -51,9 +30,22 @@ void atribuir_nota()
   printf("TODO\n");
 }
 
-void matricular_aluno()
+struct Aluno matricular_aluno(int total_alunos)
 {
-  printf("TODO\n");
+  if (total_alunos >= MAX_ALUNOS)
+  {
+    printf("Limite de alunos atingido.\n");
+    return;
+  }
+  struct Aluno novo;
+
+  printf("Digite o nome do aluno: ");
+  scanf(" %[^\n]", novo.nome);
+
+  printf("Digite o número de matrícula: ");
+  scanf("%d", &novo.nr_matricula);
+
+  return novo;
 }
 
 void exibir_alunos_matriculados()
@@ -123,6 +115,9 @@ int main()
   autenticar_usuario();
   limpar_tela();
 
+  int total_alunos = 0;
+  struct Aluno alunos[MAX_ALUNOS];
+
   int current_disciplina_idx = 0;
   struct Disciplina disciplinas[20];
 
@@ -162,7 +157,9 @@ int main()
       exibir_banner();
       break;
     case 4:
-      matricular_aluno();
+      alunos[total_alunos] = matricular_aluno(total_alunos);
+      total_alunos++;
+
       exibir_banner();
       break;
     case 5:
