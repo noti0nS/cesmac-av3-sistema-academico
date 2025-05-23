@@ -54,10 +54,24 @@ struct Aluno matricular_aluno(int total_alunos)
   return aluno;
 }
 
-void exibir_alunos_matriculados()
+void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
 {
-  printf("TODO\n");
+  if (total_alunos == 0)
+  {
+    printf("Nenhum aluno matriculado.\n");
+    return;
+  }
+
+  printf("Lista de alunos matriculados:\n");
+  for (int i = 0; i < total_alunos; i++)
+  {
+    if (alunos[i].ok == 1)
+    {
+      printf("Nome: %s | Matrícula: %d\n", alunos[i].nome, alunos[i].nr_matricula);
+    }
+  }
 }
+
 
 struct Disciplina cadastrar_disciplina(int total_disciplinas)
 {
@@ -170,7 +184,7 @@ int main()
       exibir_banner();
       break;
     case 3:
-      exibir_alunos_matriculados();
+      exibir_alunos_matriculados(alunos, total_alunos);
       exibir_banner();
       break;
     case 4:
