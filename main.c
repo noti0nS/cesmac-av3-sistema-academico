@@ -6,8 +6,7 @@
 #define USERNAME "admin"
 #define PASSWORD "admin"
 
-#define MAX_ALUNOS 500
-#define MAX_NOTAS 500
+#define MAX_ALUNOS 100
 #define MAX_DISCIPLINAS 20
 
 struct Aluno
@@ -26,6 +25,8 @@ struct AlunoDisciplinaNota
 struct Disciplina
 {
   char titulo[50];
+  struct Aluno alunos[MAX_ALUNOS];
+  int alunos_matriculados;
   struct AlunoDisciplinaNota aluno_notas[500];
   int ok;
 };
@@ -35,14 +36,39 @@ void atribuir_nota()
   printf("TODO\n");
 }
 
-struct Aluno matricular_aluno(int total_alunos)
+void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
 {
-  struct Aluno aluno;
-  if (total_alunos >= MAX_ALUNOS)
+  if (total_disciplinas == 0)
   {
-    printf("Limite de alunos atingido.\n");
-    return aluno;
+    printf("Nenhuma disciplina cadastrada.\n");
+    return;
   }
+
+  for (int i = 0; i < total_disciplinas; i++)
+  {
+    printf("%d - %s\n", i + 1, disciplinas[i].titulo);
+  }
+
+  int opcao_disciplina;
+  do
+  {
+    printf("Escolha a disciplina para matricular o aluno (1-%d): ", total_disciplinas);
+    scanf("%d", &opcao_disciplina);
+    if (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas)
+    {
+      printf("Opção inválida! Tente novamente.\n");
+    }
+  } while (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas);
+
+  struct Disciplina disciplina_selecionada = disciplinas[opcao_disciplina - 1];
+  if (disciplina_selecionada.alunos_matriculados >= MAX_ALUNOS)
+  {
+    printf("Limite de alunos matriculados atingido para essa disciplina.\n");
+    return;
+  }
+
+  struct Aluno aluno;
+  aluno.ok = 1;
 
   printf("Digite o nome do aluno: ");
   scanf(" %[^\n]", aluno.nome);
@@ -50,8 +76,10 @@ struct Aluno matricular_aluno(int total_alunos)
   printf("Digite o número de matrícula: ");
   scanf("%d", &aluno.nr_matricula);
 
-  aluno.ok = 1;
-  return aluno;
+  disciplina_selecionada.alunos[disciplina_selecionada.alunos_matriculados] = aluno;
+  disciplina_selecionada.alunos_matriculados++;
+
+  printf("Aluno matriculado com sucesso na disciplina '%s'!\n", disciplina_selecionada.titulo);
 }
 
 void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
@@ -76,7 +104,7 @@ void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
 struct Disciplina cadastrar_disciplina(int total_disciplinas)
 {
   struct Disciplina disciplina;
-  if (total_disciplinas >= 20)
+  if (total_disciplinas >= MAX_DISCIPLINAS)
   {
     printf("Limite de disciplinas atingido.\n");
     return disciplina;
@@ -95,6 +123,7 @@ void exibir_disciplinas()
 
 void exibir_banner()
 {
+  printf("                                                                \n");
   printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
   printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
   printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
@@ -154,7 +183,7 @@ int main()
     printf("1 - Exibir Disciplinas\n");
     printf("2 - Cadastrar Disciplinas\n");
     printf("3 - Exibir Alunos Matriculados\n");
-    printf("4 - Matricular Aluno\n");
+    printf("4 - Matricular Aluno em Disciplina\n");
     printf("5 - Atribuir Nota\n");
     printf("6 - Sair\n");
     printf("> ");
@@ -188,13 +217,7 @@ int main()
       exibir_banner();
       break;
     case 4:
-      struct Aluno aluno = matricular_aluno(total_alunos);
-      if (aluno.ok > 0)
-      {
-        alunos[total_alunos] = aluno;
-        total_alunos++;
-        printf("Aluno matriculado com sucesso!\n");
-      }
+      matricular_aluno(disciplinas, total_disciplinas);
       exibir_banner();
       break;
     case 5:
