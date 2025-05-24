@@ -8,18 +8,15 @@
 
 #define MAX_ALUNOS 100
 #define MAX_DISCIPLINAS 20
+#define MAX_NOTAS 10
 
 struct Aluno
 {
   char nome[100];
   int nr_matricula;
+  float notas[MAX_NOTAS];
+  int notas_atribuidas;
   int ok;
-};
-
-struct AlunoDisciplinaNota
-{
-  int aluno_matricula;
-  float nota;
 };
 
 struct Disciplina
@@ -27,13 +24,86 @@ struct Disciplina
   char titulo[50];
   struct Aluno alunos[MAX_ALUNOS];
   int alunos_matriculados;
-  struct AlunoDisciplinaNota aluno_notas[500];
   int ok;
 };
 
-void atribuir_nota()
+struct Disciplina *escolher_disciplina(struct Disciplina disciplinas[], int total_disciplinas)
 {
-  printf("TODO\n");
+  int opcao_disciplina;
+
+  for (int i = 0; i < total_disciplinas; i++)
+  {
+    printf("%d - %s\n", i + 1, disciplinas[i].titulo);
+  }
+
+  do
+  {
+    printf("Selecione uma disciplina (1-%d): ", total_disciplinas);
+    scanf("%d", &opcao_disciplina);
+    if (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas)
+    {
+      printf("Opção inválida! Tente novamente.\n");
+    }
+  } while (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas);
+  return &disciplinas[opcao_disciplina - 1];
+}
+
+struct Aluno *selecionar_aluno(struct Disciplina* disciplina)
+{
+  int opcao_aluno;
+
+  for (int i = 0; i < disciplina->alunos_matriculados; i++)
+  {
+    printf("%d - %s\n", i + 1, disciplina->alunos[i].nome);
+  }
+
+  do
+  {
+    printf("Selecione um aluno (1-%d): ", disciplina->alunos_matriculados);
+    scanf("%d", &opcao_aluno);
+    if (opcao_aluno < 1 || opcao_aluno > disciplina->alunos_matriculados)
+    {
+      printf("Opção inválida! Tente novamente.\n");
+    }
+  } while (opcao_aluno < 1 || opcao_aluno > disciplina->alunos_matriculados);
+  return &(disciplina->alunos[opcao_aluno - 1]);
+}
+
+void atribuir_nota(struct Disciplina disciplinas[], int total_disciplinas)
+{
+  if (total_disciplinas == 0)
+  {
+    printf("Nenhuma disciplina cadastrada.\n");
+    return;
+  }
+
+  struct Disciplina *disciplina_selecionada = escolher_disciplina(disciplinas, total_disciplinas);
+  if (disciplina_selecionada->alunos_matriculados == 0)
+  {
+    printf("Nenhum aluno matriculado nesta disciplina.\n");
+    return;
+  }
+
+  struct Aluno *aluno_selecionado = selecionar_aluno(disciplina_selecionada);
+  if (aluno_selecionado->notas_atribuidas >= MAX_NOTAS)
+  {
+    printf("Limite de notas atingido para o aluno '%s'.\n", aluno_selecionado->nome);
+    return;
+  }
+
+  float nota = 0.0;
+  printf("Digite a nota do aluno '%s' (Matrícula: %d): ", aluno_selecionado->nome, aluno_selecionado->nr_matricula);
+  do
+  {
+    scanf("%f", &nota);
+    if (nota < 0.0 || nota > 10.0)
+    {
+      printf("Nota inválida! Digite uma nota entre 0 e 10: ");
+    }
+  } while (nota < 0.0 || nota > 10.0);
+
+  aluno_selecionado->notas[aluno_selecionado->notas_atribuidas] = nota;
+  aluno_selecionado->notas_atribuidas++;
 }
 
 void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
@@ -44,30 +114,14 @@ void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
     return;
   }
 
-  for (int i = 0; i < total_disciplinas; i++)
-  {
-    printf("%d - %s\n", i + 1, disciplinas[i].titulo);
-  }
-
-  int opcao_disciplina;
-  do
-  {
-    printf("Escolha a disciplina para matricular o aluno (1-%d): ", total_disciplinas);
-    scanf("%d", &opcao_disciplina);
-    if (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas)
-    {
-      printf("Opção inválida! Tente novamente.\n");
-    }
-  } while (opcao_disciplina < 1 || opcao_disciplina > total_disciplinas);
-
-  struct Disciplina disciplina_selecionada = disciplinas[opcao_disciplina - 1];
-  if (disciplina_selecionada.alunos_matriculados >= MAX_ALUNOS)
+  struct Disciplina *disciplina_selecionada = escolher_disciplina(disciplinas, total_disciplinas);
+  if (disciplina_selecionada->alunos_matriculados >= MAX_ALUNOS)
   {
     printf("Limite de alunos matriculados atingido para essa disciplina.\n");
     return;
   }
 
-  struct Aluno aluno;
+  struct Aluno aluno = {0};
   aluno.ok = 1;
 
   printf("Digite o nome do aluno: ");
@@ -76,14 +130,22 @@ void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
   printf("Digite o número de matrícula: ");
   scanf("%d", &aluno.nr_matricula);
 
-  disciplina_selecionada.alunos[disciplina_selecionada.alunos_matriculados] = aluno;
-  disciplina_selecionada.alunos_matriculados++;
+  disciplina_selecionada->alunos[disciplina_selecionada->alunos_matriculados] = aluno;
+  disciplina_selecionada->alunos_matriculados++;
 
-  printf("Aluno matriculado com sucesso na disciplina '%s'!\n", disciplina_selecionada.titulo);
+  printf("Aluno matriculado com sucesso na disciplina '%s'!\n", disciplina_selecionada->titulo);
 }
 
 void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
 {
+  /*
+  
+  - Pegar as disciplinas cadastradas
+  - Para cada disciplina, pegar os alunos matriculados
+  - Para cada aluno, exibir o nome, matricula e as notas na disciplinas.
+  
+  */
+
   if (total_alunos == 0)
   {
     printf("Nenhum aluno matriculado.\n");
@@ -100,39 +162,49 @@ void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
   }
 }
 
-
 struct Disciplina cadastrar_disciplina(int total_disciplinas)
 {
-  struct Disciplina disciplina;
+  struct Disciplina disciplina = {0};
   if (total_disciplinas >= MAX_DISCIPLINAS)
   {
     printf("Limite de disciplinas atingido.\n");
     return disciplina;
   }
   printf("Digite o título da disciplina: ");
-  scanf("%s", disciplina.titulo);
+  scanf(" %[^\n]", disciplina.titulo);
   disciplina.ok = 1;
   return disciplina;
 }
 
 void exibir_disciplinas()
 {
+  /*
+  
+  - Pegar as disciplinas cadastradas (EX: Matemática, História, Política)
+
+  Output:
+
+  1 - Matemática
+  2 - História
+  3 - Política
+  
+  */
+
   printf("TODO\n");
-  ;
 }
 
 void exibir_banner()
 {
-  printf("                                                                \n");
-  printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
-  printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
-  printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
-  printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
-  printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
-  printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
-  printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
-  printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
-  printf("                                                                \n");
+  // printf("                                                                \n");
+  // printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
+  // printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
+  // printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
+  // printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
+  // printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
+  // printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
+  // printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
+  // printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
+  // printf("                                                                \n");
 }
 
 void limpar_tela()
@@ -164,19 +236,19 @@ void autenticar_usuario()
 
 int main()
 {
-  setlocale(LC_ALL, "Portuguese");
+  setlocale(LC_ALL, "pt_BR.UTF-8");
 
   limpar_tela();
   autenticar_usuario();
   limpar_tela();
-  // exibir_banner();
-  
+  exibir_banner();
+
   int total_alunos = 0;
   struct Aluno alunos[MAX_ALUNOS];
-  
+
   int total_disciplinas = 0;
   struct Disciplina disciplinas[MAX_DISCIPLINAS];
-  
+
   int option = 0;
   do
   {
@@ -221,7 +293,7 @@ int main()
       exibir_banner();
       break;
     case 5:
-      atribuir_nota();
+      atribuir_nota(disciplinas, total_disciplinas);
       exibir_banner();
       break;
     case 6:
