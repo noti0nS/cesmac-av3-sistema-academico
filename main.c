@@ -143,9 +143,9 @@ void exibir_alunos_matriculados(struct Disciplina disciplinas[], int total_disci
   }
 
   for (int i = 0; i < total_disciplinas; i++)
-  { 
+  {
     struct Disciplina disciplina = disciplinas[i];
-    if (disciplina.alunos_matriculados == 0) 
+    if (disciplina.alunos_matriculados == 0)
     {
       printf("Nenhum aluno matriculado na disciplina '%s'.\n\n", disciplina.titulo);
       continue;
@@ -162,7 +162,11 @@ void exibir_alunos_matriculados(struct Disciplina disciplinas[], int total_disci
       }
       for (int z = 0; z < aluno.notas_atribuidas; z++)
       {
-        printf("%.2f · ", aluno.notas[z]);
+        printf("%.2f ", aluno.notas[z]);
+        if (z < aluno.notas_atribuidas - 1)
+        {
+          printf("· ");
+        }
       }
       printf("\n");
     }
@@ -197,23 +201,24 @@ void exibir_disciplinas(struct Disciplina disciplinas[], int total_disciplinas)
   {
     if (disciplinas[i].ok == 1)
     {
-      printf("Título: %s\n", disciplinas[i].titulo);
-      printf("-----------------------------\n");
+      printf("%s\n", disciplinas[i].titulo);
     }
   }
+  printf("-----------------------------\n");
 }
+
 void exibir_banner()
 {
-  // printf("                                                                \n");
-  // printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
-  // printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
-  // printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
-  // printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
-  // printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
-  // printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
-  // printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
-  // printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
-  // printf("                                                                \n");
+  printf("                                                                \n");
+  printf("   ▄████████  ▄████████    ▄████████ ████████▄  ▀████    ▐████▀ \n");
+  printf("  ███    ███ ███    ███   ███    ███ ███   ▀███   ███▌   ████▀  \n");
+  printf("  ███    ███ ███    █▀    ███    ███ ███    ███    ███  ▐███    \n");
+  printf("  ███    ███ ███          ███    ███ ███    ███    ▀███▄███▀    \n");
+  printf("▀███████████ ███        ▀███████████ ███    ███    ████▀██▄     \n");
+  printf("  ███    ███ ███    █▄    ███    ███ ███    ███   ▐███  ▀███    \n");
+  printf("  ███    ███ ███    ███   ███    ███ ███   ▄███  ▄███     ███▄  \n");
+  printf("  ███    █▀  ████████▀    ███    █▀  ████████▀  ████       ███▄ \n");
+  printf("                                                                \n");
 }
 
 void limpar_tela()
