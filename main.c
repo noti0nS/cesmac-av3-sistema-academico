@@ -16,7 +16,6 @@ struct Aluno
   int nr_matricula;
   float notas[MAX_NOTAS];
   int notas_atribuidas;
-  int ok;
 };
 
 struct Disciplina
@@ -122,7 +121,6 @@ void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
   }
 
   struct Aluno aluno = {0};
-  aluno.ok = 1;
 
   printf("Digite o nome do aluno: ");
   scanf(" %[^\n]", aluno.nome);
@@ -136,7 +134,7 @@ void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
   printf("Aluno matriculado com sucesso na disciplina '%s'!\n", disciplina_selecionada->titulo);
 }
 
-void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
+void exibir_alunos_matriculados(struct Disciplina disciplinas[], int total_disciplinas)
 {
   /*
   
@@ -146,20 +144,22 @@ void exibir_alunos_matriculados(struct Aluno alunos[], int total_alunos)
   
   */
 
-  if (total_alunos == 0)
-  {
-    printf("Nenhum aluno matriculado.\n");
-    return;
-  }
+  printf("TODO\n");
 
-  printf("Lista de alunos matriculados:\n");
-  for (int i = 0; i < total_alunos; i++)
-  {
-    if (alunos[i].ok == 1)
-    {
-      printf("Nome: %s | Matrícula: %d\n", alunos[i].nome, alunos[i].nr_matricula);
-    }
-  }
+  // if (total_alunos == 0)
+  // {
+  //   printf("Nenhum aluno matriculado.\n");
+  //   return;
+  // }
+
+  // printf("Lista de alunos matriculados:\n");
+  // for (int i = 0; i < total_alunos; i++)
+  // {
+  //   if (alunos[i].ok == 1)
+  //   {
+  //     printf("Nome: %s | Matrícula: %d\n", alunos[i].nome, alunos[i].nr_matricula);
+  //   }
+  // }
 }
 
 struct Disciplina cadastrar_disciplina(int total_disciplinas)
@@ -243,9 +243,6 @@ int main()
   limpar_tela();
   exibir_banner();
 
-  int total_alunos = 0;
-  struct Aluno alunos[MAX_ALUNOS];
-
   int total_disciplinas = 0;
   struct Disciplina disciplinas[MAX_DISCIPLINAS];
 
@@ -285,7 +282,7 @@ int main()
       exibir_banner();
       break;
     case 3:
-      exibir_alunos_matriculados(alunos, total_alunos);
+      exibir_alunos_matriculados(disciplinas, total_disciplinas);
       exibir_banner();
       break;
     case 4:
