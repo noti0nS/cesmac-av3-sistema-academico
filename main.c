@@ -47,7 +47,7 @@ struct Disciplina *escolher_disciplina(struct Disciplina disciplinas[], int tota
   return &disciplinas[opcao_disciplina - 1];
 }
 
-struct Aluno *selecionar_aluno(struct Disciplina* disciplina)
+struct Aluno *selecionar_aluno(struct Disciplina *disciplina)
 {
   int opcao_aluno;
 
@@ -136,30 +136,38 @@ void matricular_aluno(struct Disciplina disciplinas[], int total_disciplinas)
 
 void exibir_alunos_matriculados(struct Disciplina disciplinas[], int total_disciplinas)
 {
-  /*
-  
-  - Pegar as disciplinas cadastradas
-  - Para cada disciplina, pegar os alunos matriculados
-  - Para cada aluno, exibir o nome, matricula e as notas na disciplinas.
-  
-  */
+  if (total_disciplinas == 0)
+  {
+    printf("Nenhuma disciplina cadastrada.\n");
+    return;
+  }
 
-  printf("TODO\n");
-
-  // if (total_alunos == 0)
-  // {
-  //   printf("Nenhum aluno matriculado.\n");
-  //   return;
-  // }
-
-  // printf("Lista de alunos matriculados:\n");
-  // for (int i = 0; i < total_alunos; i++)
-  // {
-  //   if (alunos[i].ok == 1)
-  //   {
-  //     printf("Nome: %s | Matrícula: %d\n", alunos[i].nome, alunos[i].nr_matricula);
-  //   }
-  // }
+  for (int i = 0; i < total_disciplinas; i++)
+  { 
+    struct Disciplina disciplina = disciplinas[i];
+    if (disciplina.alunos_matriculados == 0) 
+    {
+      printf("Nenhum aluno matriculado na disciplina '%s'.\n\n", disciplina.titulo);
+      continue;
+    }
+    printf("======%s======\n", disciplina.titulo);
+    for (int j = 0; j < disciplina.alunos_matriculados; j++)
+    {
+      struct Aluno aluno = disciplina.alunos[j];
+      printf("%s | %d | ", aluno.nome, aluno.nr_matricula);
+      if (aluno.notas_atribuidas == 0)
+      {
+        printf("Sem notas.\n");
+        continue;
+      }
+      for (int z = 0; z < aluno.notas_atribuidas; z++)
+      {
+        printf("%.2f · ", aluno.notas[z]);
+      }
+      printf("\n");
+    }
+    printf("\n");
+  }
 }
 
 struct Disciplina cadastrar_disciplina(int total_disciplinas)
@@ -175,24 +183,25 @@ struct Disciplina cadastrar_disciplina(int total_disciplinas)
   disciplina.ok = 1;
   return disciplina;
 }
-
-void exibir_disciplinas()
+void exibir_disciplinas(struct Disciplina disciplinas[], int total_disciplinas)
 {
-  /*
-  
-  - Pegar as disciplinas cadastradas (EX: Matemática, História, Política)
+  printf("=== Disciplinas Cadastradas ===\n");
 
-  Output:
+  if (total_disciplinas == 0)
+  {
+    printf("Nenhuma disciplina cadastrada.\n");
+    return;
+  }
 
-  1 - Matemática
-  2 - História
-  3 - Política
-  
-  */
-
-  printf("TODO\n");
+  for (int i = 0; i < total_disciplinas; i++)
+  {
+    if (disciplinas[i].ok == 1)
+    {
+      printf("Título: %s\n", disciplinas[i].titulo);
+      printf("-----------------------------\n");
+    }
+  }
 }
-
 void exibir_banner()
 {
   // printf("                                                                \n");
@@ -268,7 +277,7 @@ int main()
     switch (option)
     {
     case 1:
-      exibir_disciplinas();
+      exibir_disciplinas(disciplinas, total_disciplinas);
       exibir_banner();
       break;
     case 2:
